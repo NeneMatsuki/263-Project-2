@@ -56,9 +56,23 @@ def get_location_dict():
 def write_routes(routes, fp):
     with open(fp, "w") as f:
         for route in routes:
-            f.write(str(route) + "\n")
+            f.write(",".join(route) + "\n")
 
 
 demands = get_demand_dict()
 travel_durations = get_duration_dict()
 travel_distances = get_location_dict()
+
+
+def get_cost_of_route(route):
+    return (
+        ceil(
+            sum(
+                travel_durations[store1][store2]
+                for store1, store2 in zip(route, route[1:])
+            )
+            / (60 * 60)
+        )
+        * COST_PER_HOUR
+    )
+
