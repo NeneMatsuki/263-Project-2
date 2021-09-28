@@ -53,6 +53,12 @@ def get_location_dict():
     return d
 
 
+def write_routes(routes, fp):
+    with open(fp, "w") as f:
+        for route in routes:
+            f.write(str(route) + "\n")
+
+
 demands = get_demand_dict()
 travel_durations = get_duration_dict()
 travel_distances = get_location_dict()

@@ -6,6 +6,7 @@ from utilities import (
     demands,
     travel_durations,
     travel_distances,
+    write_routes,
 )
 
 i = 0
@@ -67,7 +68,7 @@ def get_routes(route, demands, travel_durations):
             continue
 
         # HEURISTIC: store to far away? Exclude!
-        if travel_distances[last_stop][store] > 20_000:
+        if travel_distances[last_stop][store] > 15_000:
             continue
 
         # the store is valid so find all valid extensions to that route as well
@@ -77,13 +78,19 @@ def get_routes(route, demands, travel_durations):
 
 
 def main():
+    # routes for monday thursday
     routes = get_routes([DISTRIBUTION_CENTER], demands["m_t"], travel_durations)
+    write_routes(routes, "m_t.routes.txt")
     print(f"m_t {len(routes):,}")
 
+    # routes for friday
     routes = get_routes([DISTRIBUTION_CENTER], demands["fri"], travel_durations)
+    write_routes(routes, "fri.routes.txt")
     print(f"fri {len(routes):,}")
 
+    # routes for saturday
     routes = get_routes([DISTRIBUTION_CENTER], demands["sat"], travel_durations)
+    write_routes(routes, "sat.routes.txt")
     print(f"sat {len(routes):,}")
 
 
