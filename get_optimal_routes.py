@@ -1,19 +1,22 @@
 import pulp
-from utilities import get_cost_of_route, COST_PER_HOUR, MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY
+from utilities import (
+    get_cost_of_route,
+    COST_PER_HOUR,
+    MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY,
+    demands,
+)
 import math
 import pprint
 
 
 def get_optimal_routes(routes, day):
-    stores = set(sum(map(list, routes), []))
-    stores.remove("Distribution Centre Auckland")
-    print(stores)
-
     x = pulp.LpVariable.dicts(
-        "route", routes, lowBound=0, upBound=1, cat=pulp.LpInteger
+        "route", routes, lowBound=0, upBound=1, cat=pulp.LpInteger,
     )
 
-    routing_model = pulp.LpProblem(f"Optimal Routes for {day}", pulp.LpMinimize)
+    routing_model = pulp.LpProblem(
+        f"Woolsworth Optimal Routes for {day}", pulp.LpMinimize
+    )
 
     # specify minimise cost of routes
     routing_model += pulp.lpSum(
@@ -21,14 +24,14 @@ def get_optimal_routes(routes, day):
     )
 
     routing_model += (
-        pulp.lpSum([x[route] for route in routes]) <= 120,
+        pulp.lpSum([x[route] for route in routes]) <= MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY,
         "Maximum_number_of_routes",
     )
 
-    for store in stores:
+    for store in demands[day].keys():
         routing_model += (
             pulp.lpSum([x[route] for route in routes if store in route]) == 1,
-            f"Must_sroute_%{store}",
+            f"Must_route_{store}",
         )
 
     routing_model.solve(pulp.PULP_CBC_CMD(msg=1))
@@ -38,13 +41,25 @@ def get_optimal_routes(routes, day):
         if x[route].value() == 1.0:
             print(route)
 
-    routing_model.writeLP("out.lp")
+    routing_model.writeLP(f"out{day}.lp", max_length=500)
 
 
 def main():
     with open("m_t.routes.txt") as f:
         routes = [tuple(line.strip().split(",")) for line in f.readlines()]
     get_optimal_routes(routes, "m_t")
+
+    with open("fri.routes.txt") as f:
+        routes = [tuple(line.strip().split(",")) for line in f.readlines()]
+    get_optimal_routes(routes, "fri")
+
+    with open("sat.routes.txt") as f:
+        routes = [tuple(line.strip().split(",")) for line in f.readlines()]
+    get_optimal_routes(routes, "sat")
+    # s = set(sum(map(list, routes), []))
+    # for store in demands["m_t"].keys():
+    #     if store not in s:
+    #         print(store)
 
 
 if __name__ == "__main__":

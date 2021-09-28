@@ -1,3 +1,4 @@
+from configparser import DuplicateOptionError
 from utilities import (
     TIME_PER_PALLET,
     MAXIMUM_PALLETS_PER_DELIVERY,
@@ -46,7 +47,10 @@ def get_routes(route, demands, travel_durations):
     #     print(",".join(route))
 
     # if it can then valid routes at least contains that return journey
-    valid_routes = [route + [DISTRIBUTION_CENTER]]
+    if last_stop != DISTRIBUTION_CENTER:
+        valid_routes = [route + [DISTRIBUTION_CENTER]]
+    else:
+        valid_routes = []
 
     # find all valid stores the route can connect too and find all valid extensions to that store
     for store in demands.keys():
@@ -68,7 +72,7 @@ def get_routes(route, demands, travel_durations):
             continue
 
         # HEURISTIC: store to far away? Exclude!
-        if travel_distances[last_stop][store] > 15_000:
+        if travel_distances[last_stop][store] > 20_000:
             continue
 
         # the store is valid so find all valid extensions to that route as well
