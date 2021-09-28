@@ -13,7 +13,7 @@ from utilities import (
 i = 0
 
 
-def get_routes(route, demands, travel_durations):
+def _get_routes(route, demands, travel_durations):
     """
     find all routes that can extend the current one
 
@@ -26,17 +26,14 @@ def get_routes(route, demands, travel_durations):
 
     # calculate duration and pallets for the route
     number_of_pallets = sum(demands.get(store, 0) for store in route)
-    travel_duration = sum(
-        travel_durations[store1][store2] for store1, store2 in zip(route, route[1:])
-    )
+    travel_duration = sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:]))
     total_duration = travel_duration + number_of_pallets * TIME_PER_PALLET
     last_stop = route[-1]
 
     # can the truck return back to the distribution center.
     # if not, then this and all child routes are invalid and so we should return nothing.
     if (
-        total_duration + travel_durations[last_stop][DISTRIBUTION_CENTER]
-        >= MAXIMUM_SECONDS_PER_DELIVERY
+        total_duration + travel_durations[last_stop][DISTRIBUTION_CENTER] >= MAXIMUM_SECONDS_PER_DELIVERY
         and len(route) > 1
     ):
         return []
@@ -76,26 +73,21 @@ def get_routes(route, demands, travel_durations):
             continue
 
         # the store is valid so find all valid extensions to that route as well
-        valid_routes += get_routes(route + [store], demands, travel_durations)
+        valid_routes += _get_routes(route + [store], demands, travel_durations)
 
     return valid_routes
 
 
+def get_routes(day):
+    routes = _get_routes([DISTRIBUTION_CENTER], demands[day], travel_durations)
+    write_routes(routes, f"{day}.routes.txt")
+    return routes
+
+
 def main():
-    # routes for monday thursday
-    routes = get_routes([DISTRIBUTION_CENTER], demands["m_t"], travel_durations)
-    write_routes(routes, "m_t.routes.txt")
-    print(f"m_t {len(routes):,}")
-
-    # routes for friday
-    routes = get_routes([DISTRIBUTION_CENTER], demands["fri"], travel_durations)
-    write_routes(routes, "fri.routes.txt")
-    print(f"fri {len(routes):,}")
-
-    # routes for saturday
-    routes = get_routes([DISTRIBUTION_CENTER], demands["sat"], travel_durations)
-    write_routes(routes, "sat.routes.txt")
-    print(f"sat {len(routes):,}")
+    get_routes("m_t")
+    get_routes("fri")
+    get_routes("sat")
 
 
 if __name__ == "__main__":

@@ -33,9 +33,7 @@ def get_duration_dict():
         _, *stores = next(c)
 
         for store1, *durations in c:
-            d[store1] = {
-                store2: float(duration) for store2, duration in zip(stores, durations)
-            }
+            d[store1] = {store2: float(duration) for store2, duration in zip(stores, durations)}
     return d
 
 
@@ -47,9 +45,7 @@ def get_location_dict():
         _, *stores = next(c)
 
         for store1, *durations in c:
-            d[store1] = {
-                store2: float(duration) for store2, duration in zip(stores, durations)
-            }
+            d[store1] = {store2: float(duration) for store2, duration in zip(stores, durations)}
     return d
 
 
@@ -66,13 +62,7 @@ travel_distances = get_location_dict()
 
 def get_cost_of_route(route):
     return (
-        ceil(
-            sum(
-                travel_durations[store1][store2]
-                for store1, store2 in zip(route, route[1:])
-            )
-            / (60 * 60)
-        )
+        ceil(sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:])) / (60 * 60))
         * COST_PER_HOUR
     )
 
