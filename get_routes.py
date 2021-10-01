@@ -69,7 +69,7 @@ def _get_routes(route, demands, travel_durations):
             continue
 
         # HEURISTIC: store to far away? Exclude!
-        if travel_distances[last_stop][store] > 20_000:
+        if travel_distances[last_stop][store] > 25000:
             continue
 
         # the store is valid so find all valid extensions to that route as well

@@ -4,7 +4,7 @@ from csv import reader
 TIME_PER_PALLET = 7.5 * 60  # seconds,  450
 COST_PER_HOUR = 225  # dollars
 
-MAXIMUM_SECONDS_PER_DELIVERY = 4 * 60 * 60  # seconds,  14,400
+MAXIMUM_SECONDS_PER_DELIVERY = 5 * 60 * 60  # seconds,  14,400
 MAXIMUM_PALLETS_PER_DELIVERY = 26  # pallets
 MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY = 60
 
@@ -61,8 +61,10 @@ travel_distances = get_location_dict()
 
 
 def get_cost_of_route(route):
-    return (
-        ceil(sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:])) / (60 * 60))
-        * COST_PER_HOUR
+    hours = ceil(sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:])) / (60 * 60))
+    extrahrs = 0
+    if hours > 4:
+        extrahrs = hours-4
+    return ( hours * COST_PER_HOUR + extrahrs * 475
     )
 
