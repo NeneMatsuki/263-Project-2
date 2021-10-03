@@ -20,7 +20,7 @@ def _get_optimal_routes(routes, stores, day):
     routing_model = pulp.LpProblem(f"Woolsworth Optimal Routes for {day}", pulp.LpMinimize)
 
     # specify objective function as the sum of the cost of routes
-    routing_model += pulp.lpSum([get_cost_of_route(route) * x[route] for route in routes])
+    routing_model += pulp.lpSum([get_cost_of_route(route,day) * x[route] for route in routes])
 
     # specify maximum number of routes
     routing_model += (
