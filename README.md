@@ -7,7 +7,7 @@ The file "utilities.py" stores the constraints for route generation
 
 ***path ---> 263-PROJECT-2/main.py***
 
-Run main.py to obtain files that contain possible routes;
+Run main.py to obtain files that contain optimal routes;
 m_t.optimal.routes.txt, fri.optimal.routes.txt, sat.optimal.routes.txt
 
 
