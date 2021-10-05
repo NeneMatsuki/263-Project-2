@@ -5,10 +5,12 @@ The file "get_optimal_routes.py" returns the optimal solution from the generated
 The file "get_routes.py" generates all possible routes subject to constraints.
 The file "utilities.py" stores the constraints for route generation
 
-First run the get_routes file to obtain files that contain possible routes
-***path ---> 263-PROJECT-2/get_routes.py***
+***path ---> 263-PROJECT-2/main.py***
 
-Then run the get_optimal_routes.py" which returns the optimal route. 
-***path ---> 263-PROJECT-2/get_optimal_routes.py***
+Run main.py to obtain files that contain possible routes;
+m_t.optimal.routes.txt, fri.optimal.routes.txt, sat.optimal.routes.txt
+
+
+
 
 Authors: Shannon Blackhall, Maia Darling, Tom Purkis, Nene Matsuki
