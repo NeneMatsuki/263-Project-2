@@ -1,5 +1,5 @@
 from get_routes import get_routes
-from get_optimal_routes import get_optimal_routes
+from get_optimal_routes import get_optimal_routes, arr
 
 
 def main():
@@ -19,6 +19,8 @@ def main():
         for day in days:
             for route in optimal_routes[day]:
                 f.write(f"{day}," + ",".join(route) + "\n")
+
+    print(arr)
 
 
 if __name__ == "__main__":

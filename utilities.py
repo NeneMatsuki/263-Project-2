@@ -61,8 +61,15 @@ travel_distances = get_location_dict()
 
 
 def get_cost_of_route(route):
+    return sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:])) / (
+        60 * 60
+    )
+
     return (
-        ceil(sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:])) / (60 * 60))
+        ceil(
+            sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:]))
+            / (60 * 60)
+        )
         * COST_PER_HOUR
     )
 

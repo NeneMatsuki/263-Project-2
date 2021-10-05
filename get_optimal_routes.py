@@ -6,13 +6,12 @@ from utilities import (
     demands,
     write_routes,
 )
-import math
-import pprint
+
+arr = []
 
 
 def _get_optimal_routes(routes, stores, day):
     """return the most optimal route given a list of routes, stores, and the day"""
-
     # Create a decision variable for each route store in a dict
     x = pulp.LpVariable.dicts("route", routes, lowBound=0, upBound=1, cat=pulp.LpInteger,)
 
@@ -40,7 +39,7 @@ def _get_optimal_routes(routes, stores, day):
     print("Status:", pulp.LpStatus[routing_model.status], routing_model.status)
     print("The choosen tables are out of a total of %s:" % len(routes))
     routing_model.writeLP(f"out-{day}.lp", max_length=500)
-
+    arr.append(routing_model.objective.value())
     # return the chosen routes
     chosen_routes = [route for route in routes if x[route].value() == 1.0]
     return chosen_routes

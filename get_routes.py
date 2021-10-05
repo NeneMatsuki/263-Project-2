@@ -10,8 +10,6 @@ from utilities import (
     write_routes,
 )
 
-i = 0
-
 
 def _get_routes(route, demands, travel_durations):
     """
@@ -26,22 +24,20 @@ def _get_routes(route, demands, travel_durations):
 
     # calculate duration and pallets for the route
     number_of_pallets = sum(demands.get(store, 0) for store in route)
-    travel_duration = sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:]))
+    travel_duration = sum(
+        travel_durations[store1][store2] for store1, store2 in zip(route, route[1:])
+    )
     total_duration = travel_duration + number_of_pallets * TIME_PER_PALLET
     last_stop = route[-1]
 
     # can the truck return back to the distribution center.
     # if not, then this and all child routes are invalid and so we should return nothing.
     if (
-        total_duration + travel_durations[last_stop][DISTRIBUTION_CENTER] >= MAXIMUM_SECONDS_PER_DELIVERY
+        total_duration + travel_durations[last_stop][DISTRIBUTION_CENTER]
+        >= MAXIMUM_SECONDS_PER_DELIVERY
         and len(route) > 1
     ):
         return []
-
-    # global i
-    # i += 1
-    # if i % 100_000 == 0:
-    #     print(",".join(route))
 
     # if it can then valid routes at least contains that return journey
     if last_stop != DISTRIBUTION_CENTER:
@@ -69,7 +65,7 @@ def _get_routes(route, demands, travel_durations):
             continue
 
         # HEURISTIC: store to far away? Exclude!
-        if travel_distances[last_stop][store] > 20_000:
+        if travel_distances[last_stop][store] > 15_000:
             continue
 
         # the store is valid so find all valid extensions to that route as well
@@ -79,8 +75,15 @@ def _get_routes(route, demands, travel_durations):
 
 
 def get_routes(day):
-    routes = _get_routes([DISTRIBUTION_CENTER], demands[day], travel_durations)
+    routes = sum(
+        (
+            _get_routes([DISTRIBUTION_CENTER, store], demands[day], travel_durations)
+            for store in demands[day].keys()
+        ),
+        [],
+    )
     write_routes(routes, f"{day}.routes.txt")
+    print(day, len(routes))
     return routes
 
 
