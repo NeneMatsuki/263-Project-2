@@ -4,7 +4,7 @@ from csv import reader
 TIME_PER_PALLET = 7.5 * 60  # seconds,  450
 COST_PER_HOUR = 225  # dollars
 
-MAXIMUM_SECONDS_PER_DELIVERY = 4.5 * 60 * 60  # seconds,  14,400
+MAXIMUM_SECONDS_PER_DELIVERY = 4 * 60 * 60  # seconds,  14,400
 MAXIMUM_PALLETS_PER_DELIVERY = 26  # pallets
 MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY = 60
 
@@ -76,10 +76,10 @@ def get_cost_of_route(route,day):
     # reference line 28 get routes  
     number_of_pallets = sum(demands[day].get(store,0) for store in route)  # this returns 0 though as stores are not stored as array?
     travel_duration = sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:]))
-    hours = ((travel_duration + number_of_pallets * TIME_PER_PALLET)/3600)
+    minutes = ceil((travel_duration + number_of_pallets * TIME_PER_PALLET)/60)
 
     extrahrs = 0
-    if (hours) > 4:
-        extrahrs = hours-4
-    return ( hours * COST_PER_HOUR + extrahrs * 275)
+    if (minutes) > 240:
+        extrahrs = minutes-240
+    return ( minutes * (COST_PER_HOUR/60) + extrahrs * (275/60))
 
