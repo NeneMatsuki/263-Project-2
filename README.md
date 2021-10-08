@@ -4,6 +4,7 @@ Project 2 for ENGSCI 263 2021
 The file "get_optimal_routes.py" returns the optimal solution from the generated routes using pulp library
 The file "get_routes.py" generates all possible routes subject to constraints.
 The file "utilities.py" stores the constraints for route generation
+The file "maping.py" creates a map visualisation of the trucking routes using folium and open route source.
 
 ***path ---> 263-PROJECT-2/main.py***
 

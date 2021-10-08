@@ -1,5 +1,7 @@
 from get_routes import get_routes
 from get_optimal_routes import get_optimal_routes
+from maping import fri_map, mon_thrs_map, sat_map
+import time
 
 
 def main():
@@ -20,6 +22,12 @@ def main():
             for route in optimal_routes[day]:
                 f.write(f"{day}," + ",".join(route) + "\n")
 
+    #mapping optimum routes for each day,  #waiting a minute in between to preven rate limit exceeding
+    mon_thrs_map()
+    time.sleep(60)
+    fri_map()
+    time.sleep(60)
+    sat_map()
 
 if __name__ == "__main__":
     main()
