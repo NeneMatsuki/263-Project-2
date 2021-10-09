@@ -41,7 +41,7 @@ def get_cost_of_bootroute(route, demand):
         extrahrs = minutes-240
     return (minutes * (COST_PER_HOUR/60) + extrahrs * (275/60))
 
-def plot_bench(day):
+def plot_boot(day):
     # this plots the bootstrap distribution of the plots and prints the mean and 95% bootstrap interval
     # get 1000 random costs
     costs = [None] * 1000
@@ -63,9 +63,10 @@ def plot_bench(day):
     plt.show()
 
 def main():
-    plot_bench("m_t")
-    plot_bench("fri")
-    plot_bench("sat")
+    #plot bootstraps
+    plot_boot("m_t")
+    plot_boot("fri")
+    plot_boot("sat")
 
 
 if __name__ == "__main__":
