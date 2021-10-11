@@ -1,5 +1,8 @@
 from math import ceil
 from csv import reader
+import pandas as pd
+import scipy.stats as stats
+import numpy as np
 
 TIME_PER_PALLET = 7.5 * 60  # seconds,  450
 COST_PER_HOUR = 225  # dollars
@@ -82,4 +85,30 @@ def get_cost_of_route(route,day):
     if (minutes) > 240:
         extrahrs = minutes-240
     return ( minutes * (COST_PER_HOUR/60) + extrahrs * (275/60))
+
+
+
+def get_clean_congestion():
+    """clean up congestion % factor data, removing outliers, and calculate mon-thu average"""
+
+    congestion_d = pd.read_csv("congestion_data.txt", sep = ',')
+    days = list(congestion_d)
+
+    #remove outliers, i.e. if z score greater than 2.5
+    for day in days:
+        congestion_d = congestion_d[(np.abs(stats.zscore(congestion_d[day])))<2.5]
+
+    #calculate means for mon-thu congestion for each week
+    congestion_d['Mon-Thu'] = congestion_d[['Mon','Tue','Wed','Thu']].mean(axis=1).astype(int)
+    congestion_d = congestion_d.drop(['Mon','Tue','Wed','Thu'], axis = 1)
+    congestion_d = congestion_d[['Mon-Thu','Fri','Sat']]
+
+    return congestion_d.to_dict('dict')
+
+congestion_percent = get_clean_congestion()
+
+def random_congest_time(period, store1, store2):
+    """calculate actual time of travel using randomly sampled congestion factor"""
+    random_factor=congestion_percent[period][np.random.choice(list(congestion_percent[period]))]
+    return (1+(random_factor/100))*travel_durations[store1][store2]
 
