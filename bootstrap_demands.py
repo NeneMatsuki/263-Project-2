@@ -70,8 +70,8 @@ def get_total_cost(day):
     for route in routes:
 
         # get the total cost of the route and the removed stores from the route in order to keep routes under constraint. Add the cost to the total cost
-        totalCost += get_cost_of_bootroute(route,demands,routes)[0]
-        removedStores = get_cost_of_bootroute(route,demands,routes)[1]
+        totalCost += get_cost_of_bootroute(route,demands,routes,day)[0]
+        removedStores = get_cost_of_bootroute(route,demands,routes, day)[1]
 
         # if there are some stores removed
         if(len(removedStores)> 0):
@@ -81,7 +81,7 @@ def get_total_cost(day):
                 newRoute.append(removedStores[i])
 
             # get the details of the newRoute
-            nPallets, travel_duration = get_newRoute_details(newRoute, demands)
+            nPallets, travel_duration = get_newRoute_details(newRoute, demands, day)
 
             # if the newRoute exceeds the constraints
             if((nPallets > MAXIMUM_PALLETS_PER_DELIVERY) or (travel_duration > MAXIMUM_SECONDS_PER_DELIVERY)):
@@ -94,7 +94,7 @@ def get_total_cost(day):
                     tempRoute.append(newRoute[-1])
                     newRoute = newRoute[:-1]
                     # re-calculate details of newRoute
-                    nPallets, travel_duration = get_newRoute_details(newRoute, demands)
+                    nPallets, travel_duration = get_newRoute_details(newRoute, demands, day)
 
                 totalCost += calculate_cost(nPallets, travel_duration) # add the cost of the newRoute to the total cost
                 extraBus += 1                                          # add an Extra bus used
@@ -104,7 +104,7 @@ def get_total_cost(day):
     if (len(newRoute)> 0):
 
         # add the cost of the new route to the total cost and increase the number of trucks used
-        nPallets, travel_duration = get_newRoute_details(newRoute, demands)
+        nPallets, travel_duration = get_newRoute_details(newRoute, demands, day)
         totalCost += calculate_cost(nPallets, travel_duration)
         extraBus += 1
 
@@ -115,7 +115,7 @@ def get_total_cost(day):
     # return the total cost
     return(totalCost)
 
-def get_cost_of_bootroute(routeO, demand, routes):
+def get_cost_of_bootroute(routeO, demand, routes, day):
     """ returns the cost of a single route subject to the specified demand, and stores if constraints not met
         
         Parameters:
@@ -159,7 +159,7 @@ def get_cost_of_bootroute(routeO, demand, routes):
         route = route[:-1]          # make route shorter
 
     number_of_pallets = sum(demand.get(store,0) for store in route)   # get the number of pallets                         
-    travel_duration = sum(travel_durations[store1][store2] for store1, store2 in zip(route, route[1:]))    # get the travel duration
+    travel_duration = sum(random_congest_time(day, store1, store2) for store1, store2 in zip(route, route[1:]))    # get the travel duration
 
     # return the cost of the route and the stores that were removed
     return (calculate_cost(number_of_pallets, travel_duration), newRoute)
@@ -189,7 +189,7 @@ def calculate_cost(number_of_pallets, travel_duration):
         extrahrs = minutes-240
     return ((minutes * (COST_PER_HOUR/60) + extrahrs * (275/60)))
 
-def get_newRoute_details(newRoute, demands):
+def get_newRoute_details(newRoute, demands, day):
     """ returns the pallets and travel duration
 
         Parameters:
@@ -210,10 +210,10 @@ def get_newRoute_details(newRoute, demands):
     """
     # thias function returns the number of pallets and the travel duration for a new route
     nPallets = sum(demands.get(store,0) for store in newRoute)
-    travel_duration = sum(travel_durations[store1][store2] for store1, store2 in zip(newRoute, newRoute[1:])) 
+    travel_duration = sum(random_congest_time(day, store1, store2) for store1, store2 in zip(newRoute, newRoute[1:])) 
 
     # must add travel duration to and from distribution centre 
-    travel_duration += travel_durations["Distribution Centre Auckland"][newRoute[0]] + travel_durations[newRoute[-1]]["Distribution Centre Auckland"]
+    travel_duration += random_congest_time(day, "Distribution Centre Auckland", newRoute[0]) + random_congest_time(day, newRoute[-1], "Distribution Centre Auckland")
     return (nPallets, travel_duration)
 
 def plot_boot(day):
