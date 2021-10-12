@@ -109,6 +109,15 @@ congestion_percent = get_clean_congestion()
 
 def random_congest_time(period, store1, store2):
     """calculate actual time of travel using randomly sampled congestion factor"""
+    
+    #change of syntax
+    if period == "m_t":
+        period = "Mon-Thu"
+    elif period == "fri":
+        period = "Fri"
+    elif period == "sat":
+        period = "Sat"    
+
     random_factor=congestion_percent[period][np.random.choice(list(congestion_percent[period]))]
     return (1+(random_factor/100))*travel_durations[store1][store2]
 
