@@ -241,14 +241,35 @@ def plot_boot(day):
         costs[i] = get_total_cost(day)
     costs.sort()    # sort the cost
 
+    found = False
+    i = 0
+    if(day == "m_t"):
+        while((i < 1000) and (found == False)):
+            if (costs[i] > 19113.75):
+                found = True
+            i+=1
+
+    elif(day == "fri"):
+        while((i < 1000) and (found == False)):
+            if (costs[i] > 18750):
+                found = True
+            i += 1
+
+    else:
+        while((i < 1000) and (found == False)):
+            if (costs[i] > 11831.25):
+                found = True
+            i += 1
+
     global EXCEEDED
 
-    print("\n////////////////////////////////////////////////////////////////////////////")
+    print("\n///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
     print('The mean cost for '+ day +' is', statistics.mean(costs))
     print('The 95%" bootstrap confidence interval is', costs[25], ",", costs[975])
+    print('\nIf we plan our project using expected times and the resulting optimal path, cost will be greater than expected, ', (1000-i)/10, '% of the time')
     print('\nthese are the times each route exceeds the pallet limit:')
     print(EXCEEDED)
-    print("///////////////////////////////////////////////////////////////////////////")
+    print("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
 
     # plot the data
     sns.displot(data = costs, binwidth = 200)
