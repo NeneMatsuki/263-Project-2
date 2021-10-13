@@ -36,8 +36,8 @@ def mon_thrs_map():
             iconCol = "orange"
         elif locations.Type[i] == "Distribution Centre":
             iconCol = "black"
-        folium.Marker(
-            list(reversed(coords[i])), popup=locations.Store[i], icon=folium.Icon(color=iconCol)
+        folium.CircleMarker(
+            list(reversed(coords[i])), popup=locations.Store[i], color=iconCol, radius = 7, fill = True
         ).add_to(m)
 
     # Booting up client in ORS
@@ -131,8 +131,8 @@ def fri_map():
             iconCol = "orange"
         elif locations.Type[i] == "Distribution Centre":
             iconCol = "black"
-        folium.Marker(
-            list(reversed(coords[i])), popup=locations.Store[i], icon=folium.Icon(color=iconCol)
+        folium.CircleMarker(
+            list(reversed(coords[i])), popup=locations.Store[i], color=iconCol, radius = 7, fill = True
         ).add_to(m)
 
     # Booting up client in ORS
@@ -226,8 +226,8 @@ def sat_map():
             iconCol = "orange"
         elif locations.Type[i] == "Distribution Centre":
             iconCol = "black"
-        folium.Marker(
-            list(reversed(coords[i])), popup=locations.Store[i], icon=folium.Icon(color=iconCol)
+        folium.CircleMarker(
+            list(reversed(coords[i])), popup=locations.Store[i], color=iconCol, radius = 7, fill = True
         ).add_to(m)
 
     # Booting up client in ORS
