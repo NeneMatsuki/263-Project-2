@@ -43,8 +43,6 @@ def mon_thrs_map():
     # Booting up client in ORS
     client = ors.Client(key=ORSkey)
 
-    # monday mapping
-
     # opening optimum routes file, reading in routes, and closing file
     f = open("m_t.optimal.routes.txt", "r")
     lines = f.readlines()
@@ -89,7 +87,7 @@ def mon_thrs_map():
         )
         # adding the route as a polyline to the map
         folium.PolyLine(
-            color=colours2[i],
+            color=colours2[i], popup= ('Route ' + str(i)),
             locations=[
                 list(reversed(coord)) for coord in route["features"][0]["geometry"]["coordinates"]
             ],
@@ -184,7 +182,7 @@ def fri_map():
         )
         # adding the route as a polyline to the map
         folium.PolyLine(
-            color=colours2[i],
+            color=colours2[i], popup= ('Route ' + str(i)),
             locations=[
                 list(reversed(coord)) for coord in route["features"][0]["geometry"]["coordinates"]
             ],
@@ -279,7 +277,7 @@ def sat_map():
         )
         # adding the route as a polyline to the map
         folium.PolyLine(
-            color=colours2[i],
+            color=colours2[i], popup= ('Route ' + str(i)),
             locations=[
                 list(reversed(coord)) for coord in route["features"][0]["geometry"]["coordinates"]
             ],
