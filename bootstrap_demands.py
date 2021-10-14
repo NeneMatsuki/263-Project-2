@@ -10,7 +10,7 @@ import numpy as np
 
 # stores whcih routes exceeded demand
 global EXCEEDED 
-EXCEEDED = np.zeros(23)
+EXCEEDED = np.zeros(25)
 
 def get_random_demand(day):
     """ returns a dictinoary with demands for each day randomly pulled from a pool
@@ -279,7 +279,7 @@ def plot_boot(day):
     plt.title("Bootstrap distribution for cost of optimal "+ day + " route for "+day+" (demands)")
     plt.show()
 
-    EXCEEDED = np.zeros(23)
+    EXCEEDED = np.zeros(26)
 
 def main():
 
