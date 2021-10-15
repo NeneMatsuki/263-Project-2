@@ -306,6 +306,10 @@ def plot_boot(pool, day):
     plt.xlabel("cost of route (NZD)")
     plt.title("Bootstrap distribution for cost of "+ day)
     plt.tight_layout()
+    if(no_stores_removed):
+        plt.savefig("bootstrap plot" + os.sep + pool + " bootstrap")
+    else:
+        plt.savefig("bootstrap plots" + os.sep + "stores deleted on" + day)
     plt.show()
 
     EXCEEDED = np.zeros(23)
@@ -314,7 +318,7 @@ def plot_boot(pool, day):
 
 if __name__ == "__main__":
 
-    plot_Simulation = True         # plot original distribution
+    plot_Simulation = False        # plot original distribution
     plot_with_stores_deleted = True # plot with some stores deleted
 
     if(plot_Simulation):
