@@ -1,5 +1,5 @@
 import time
-
+import os
 colours2 = "#cccc00,#dbb000,#e59300,#e97400,#e9511c,#e32631,#d60043,#c20054,#a80063,#860071,#5a007b,#000080,#002497,#0036a6,#0044ab,#004ea8,#00579c,#00608a,#006774,#006f5b,#007541,#007b27,#008000".split(
     ","
 )
@@ -15,7 +15,7 @@ def mon_thrs_map():
     ORSkey = "5b3ce3597851110001cf62480371af7700564e1990d43766e3c68834"
 
     # reading in store locations
-    locations = pd.read_csv("WoolworthsLocations.csv")
+    locations = pd.read_csv("data" + os.sep +"WoolworthsLocations.csv")
 
     # getting store location coordinates
     coords = locations[["Long", "Lat"]]
@@ -44,7 +44,7 @@ def mon_thrs_map():
     client = ors.Client(key=ORSkey)
 
     # opening optimum routes file, reading in routes, and closing file
-    f = open("m_t.optimal.routes.txt", "r")
+    f = open("optimal routes" + os.sep + "m_t.optimal.routes.txt", "r")
     lines = f.readlines()
     f.close()
 
@@ -94,7 +94,7 @@ def mon_thrs_map():
         ).add_to(m)
 
     # saving the map to file
-    m.save("m_t_map.html")
+    m.save("maps" + os.sep + "m_t_map.html")
 
 
 def fri_map():
@@ -108,7 +108,7 @@ def fri_map():
     ORSkey = "5b3ce3597851110001cf62480371af7700564e1990d43766e3c68834"
 
     # reading in store locations
-    locations = pd.read_csv("WoolworthsLocations.csv")
+    locations = pd.read_csv("data" + os.sep +"WoolworthsLocations.csv")
 
     # getting store location coordinates
     coords = locations[["Long", "Lat"]]
@@ -139,7 +139,7 @@ def fri_map():
     # monday mapping
 
     # opening optimum routes file, reading in routes, and closing file
-    f = open("fri.optimal.routes.txt", "r")
+    f = open("optimal routes" + os.sep + "fri.optimal.routes.txt", "r")
     lines = f.readlines()
     f.close()
 
@@ -189,7 +189,7 @@ def fri_map():
         ).add_to(m)
 
     # saving the map to file
-    m.save("fri_map.html")
+    m.save("maps" + os.sep + "fri_map.html")
 
 
 def sat_map():
@@ -203,7 +203,7 @@ def sat_map():
     ORSkey = "5b3ce3597851110001cf62480371af7700564e1990d43766e3c68834"
 
     # reading in store locations
-    locations = pd.read_csv("WoolworthsLocations.csv")
+    locations = pd.read_csv("data" + os.sep + "WoolworthsLocations.csv")
 
     # getting store location coordinates
     coords = locations[["Long", "Lat"]]
@@ -234,7 +234,7 @@ def sat_map():
     # monday mapping
 
     # opening optimum routes file, reading in routes, and closing file
-    f = open("sat.optimal.routes.txt", "r")
+    f = open("optimal routes" + os.sep + "sat.optimal.routes.txt", "r")
     lines = f.readlines()
     f.close()
 
@@ -284,7 +284,7 @@ def sat_map():
         ).add_to(m)
 
     # saving the map to file
-    m.save("sat_map.html")
+    m.save("maps" + os.sep + "sat_map.html")
 
 
 if __name__ == "__main__":

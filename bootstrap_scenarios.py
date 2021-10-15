@@ -12,6 +12,12 @@ import numpy as np
 global EXCEEDED 
 EXCEEDED = np.zeros(25)
 
+global DELETEDTOTAL
+DELETEDTOTAL = 0
+
+global ORIGINALTOTAL
+ORIGINALTOTAL = 132946
+
 def get_random_demand(day):
     """ returns a dictinoary with demands for each day randomly pulled from a pool
         
@@ -33,14 +39,14 @@ def get_random_demand(day):
     with open("demand_pool" + os.sep + f"{day}_pool.csv", mode = 'r') as f:
         f.readline()
         reader = csv.reader(f)
-        if (day == "sat"):
+        if (day != "m_t_manukau"):
             dict = {rows[0]:int(rows[random.randint(1,3)]) for rows in reader}   
         else:
             dict = {rows[0]:int(rows[random.randint(1,15)]) for rows in reader}
     # return the dictionary  
     return dict
 
-def get_total_cost(day):
+def get_total_cost(pool, day):
     """ returns the total cost of the optimal routes for a day
         
         Parameters:
@@ -57,9 +63,9 @@ def get_total_cost(day):
 
     """
     # open the optimal route file and get the cost
-    with open(f"{day}.optimal.routes.txt") as f:
+    with open("optimal routes" + os.sep  + f"{pool}.optimal.routes.txt") as f:
         routes = [tuple(line.strip().split(",")) for line in f.readlines()]
-    demands = get_random_demand(day)
+    demands = get_random_demand(pool)
     #print(sum(checkPallet(route, demands) for route in routes))
 
     totalCost = 0 # this stores the total cost of the route
@@ -216,7 +222,7 @@ def get_newRoute_details(newRoute, demands, day):
     travel_duration += random_congest_time(day, "Distribution Centre Auckland", newRoute[0]) + random_congest_time(day, newRoute[-1], "Distribution Centre Auckland")
     return (nPallets, travel_duration)
 
-def plot_boot(day):
+def plot_boot(pool, day):
     """ plots the bootstrap distribution of the plots and prints the mean and 95% bootstrap interval
         
         Parameters:
@@ -238,37 +244,59 @@ def plot_boot(day):
     # get 1000 random costs
     costs = [None] * 1000
     for i in range (1000):
-        costs[i] = get_total_cost(day)
+        costs[i] = get_total_cost(pool, day)
     costs.sort()    # sort the cost
 
-    found = False
-    i = 0
-    if(day == "m_t"):
-        while((i < 1000) and (found == False)):
-            if (costs[i] > 19113.75):
-                found = True
-            i+=1
+    no_stores_removed = True
 
-    elif(day == "fri"):
-        while((i < 1000) and (found == False)):
-            if (costs[i] > 18750):
-                found = True
-            i += 1
+    if(pool != day):
+        no_stores_removed = False
 
-    else:
-        while((i < 1000) and (found == False)):
-            if (costs[i] > 11831.25):
-                found = True
-            i += 1
+    if(no_stores_removed):
+        found = False
+        i = 0
+        if(day == "m_t"):
+            while((i < 1000) and (found == False)):
+                if (costs[i] > 19113.75):
+                    found = True
+                i+=1
+
+        elif(day == "fri"):
+            while((i < 1000) and (found == False)):
+                if (costs[i] > 18750):
+                    found = True
+                i += 1
+
+        else:
+            while((i < 1000) and (found == False)):
+                if (costs[i] > 11831.25):
+                    found = True
+                i += 1
 
     global EXCEEDED
+    global ORIGINALTOTAL
+    global DELETEDTOTAL
 
-    print("\n///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
-    print('The mean cost for '+ day +' is', statistics.mean(costs))
-    print('The 95%" bootstrap confidence interval is', costs[25], ",", costs[975])
-    print('\nIf we plan our project using expected times and the resulting optimal path, cost will be greater than expected, ', (1000-i)/10, '% of the time')
-    print('\nthese are the times each route exceeds the pallet limit:')
-    print(EXCEEDED)
+    original = 132950
+
+    if(no_stores_removed):
+        if(pool == "m_t"):
+            ORIGINALTOTAL += 4*statistics.mean(costs)
+        else:
+            ORIGINALTOTAL += statistics.mean(costs)
+    else:
+        if(pool == "routes_deleted" + os.sep + "m_t_deleted"):
+            DELETEDTOTAL += 4*statistics.mean(costs)
+        else:
+            DELETEDTOTAL += statistics.mean(costs)
+
+    print("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
+    print('The mean cost for '+ pool +' is', statistics.mean(costs))
+    print('The 95%" bootstrap confidence interval is', costs[25], ",", costs[975], '\n')
+    if(no_stores_removed):
+        print('If we plan our project using expected times and the resulting optimal path, cost will be greater than expected, ', (1000-i)/10, '% of the time')
+        print('\nthese are the times each route exceeds the pallet limit:')
+        print(EXCEEDED)
     print("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
 
     # plot the data
@@ -276,18 +304,38 @@ def plot_boot(day):
 
     plt.ylabel("frequency")
     plt.xlabel("cost of route (NZD)")
-    plt.title("Bootstrap distribution for cost of optimal "+ day + " route for "+day+" (demands)")
+    plt.title("Bootstrap distribution for cost of "+ day)
+    plt.tight_layout()
+    if(no_stores_removed):
+        plt.savefig("bootstrap plots" + os.sep + pool + " bootstrap")
+    else:
+        plt.savefig("bootstrap plots" + os.sep + "stores deleted on" + day)
     plt.show()
 
     EXCEEDED = np.zeros(26)
 
-def main():
-
-    #plot bootstraps
-    plot_boot("m_t")
-    plot_boot("fri")
-    plot_boot("sat")
 
 
 if __name__ == "__main__":
-    main()
+
+    plot_Simulation = True        # plot original distribution
+    plot_with_stores_deleted = True # plot with some stores deleted
+
+    if(plot_Simulation):
+        ORIGINALTOTAL = 0
+        print("\n----------------------------------------------------Investigating original routes----------------------------------------------------\n")
+        plot_boot("m_t", "m_t")
+        plot_boot("fri", "fri")
+        plot_boot("sat", "sat")
+        print('\nthis scenario is', round((ORIGINALTOTAL - 107036)*100/107036,2), " %' higher than  our expected optimal cost")
+        print('\n-------------------------------------------------------------------------------------------------------------------------------------\n')
+
+    #plot bootstraps
+    if(plot_with_stores_deleted):
+        DELETEDTOTAL = 0
+        print("\n\n------------Investigating scenario where Countdown Manukau, Papakura, northwest, Higland Park, and Sylvia Park is deleted------------\n")
+        plot_boot("routes_deleted" + os.sep + "m_t_deleted", "m_t")
+        plot_boot("routes_deleted" + os.sep + "fri_deleted", "fri")
+        plot_boot("routes_deleted" + os.sep + "sat_deleted", "sat")
+        print("\nThis sceneario costs approximately $", round(ORIGINALTOTAL - DELETEDTOTAL,2), "less than the original scenario" )
+        print('\n-------------------------------------------------------------------------------------------------------------------------------------\n')

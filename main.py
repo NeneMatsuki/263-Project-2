@@ -2,6 +2,7 @@ from get_routes import get_routes
 from get_optimal_routes import get_optimal_routes
 from maping import fri_map, mon_thrs_map, sat_map
 import time
+import os
 
 
 def main():
@@ -17,7 +18,7 @@ def main():
         optimal_routes[day] = get_optimal_routes(day)
 
     # write the optimal routes to a file
-    with open("optimal.csv", "w") as f:
+    with open("optimal routes" + os.sep + "optimal.csv", "w") as f:
         for day in days:
             for route in optimal_routes[day]:
                 f.write(f"{day}," + ",".join(route) + "\n")
