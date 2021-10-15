@@ -1,4 +1,5 @@
 from configparser import DuplicateOptionError
+import os
 from utilities import (
     TIME_PER_PALLET,
     MAXIMUM_PALLETS_PER_DELIVERY,
@@ -80,7 +81,7 @@ def _get_routes(route, demands, travel_durations):
 
 def get_routes(day):
     routes = _get_routes([DISTRIBUTION_CENTER], demands[day], travel_durations)
-    write_routes(routes, f"{day}.routes.txt")
+    write_routes(routes, "generated_routes" + os.sep +f"{day}.routes.txt")
     return routes
 
 

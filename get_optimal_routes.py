@@ -8,6 +8,7 @@ from utilities import (
 )
 import math
 import pprint
+import os
 
 
 def _get_optimal_routes(routes, stores, day):
@@ -39,7 +40,7 @@ def _get_optimal_routes(routes, stores, day):
     routing_model.solve(pulp.PULP_CBC_CMD(msg=1))
     print("Status:", pulp.LpStatus[routing_model.status], routing_model.status)
     print("The choosen tables are out of a total of %s:" % len(routes))
-    routing_model.writeLP(f"out-{day}.lp", max_length=500)
+    routing_model.writeLP("linear model" + os.sep + f"out-{day}.lp", max_length=500)
 
     # return the chosen routes
     chosen_routes = [route for route in routes if x[route].value() == 1.0]
@@ -48,11 +49,11 @@ def _get_optimal_routes(routes, stores, day):
 
 def get_optimal_routes(day):
     """get the optimal route for a given day"""
-    with open(f"{day}.routes.txt") as f:
+    with open("generated_routes" + os.sep + f"{day}.routes.txt") as f:
         routes = [tuple(line.strip().split(",")) for line in f.readlines()]
     stores = list(demands[day].keys())
     routes = _get_optimal_routes(routes, stores, day)
-    write_routes(routes, f"{day}.optimal.routes.txt")
+    write_routes(routes, "optimal routes" + os.sep + f"{day}.optimal.routes.txt")
     return routes
 
 

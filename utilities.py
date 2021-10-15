@@ -3,6 +3,7 @@ from csv import reader
 import pandas as pd
 import scipy.stats as stats
 import numpy as np
+import os
 
 TIME_PER_PALLET = 7.5 * 60  # seconds,  450
 COST_PER_HOUR = 225  # dollars
@@ -17,7 +18,7 @@ DISTRIBUTION_CENTER = "Distribution Centre Auckland"
 def get_demand_dict():
     """Get a dictionary of the ceiling of each stores demand for monday_thursday, friday, saturday"""
     d = {"m_t": {}, "fri": {}, "sat": {}}
-    with open("EstimatedDemands.csv") as f:
+    with open("data" + os.sep + "EstimatedDemands.csv") as f:
         f.readline()
         c = reader(f)
         for store, m_t, fri, sat in c:
@@ -31,7 +32,7 @@ def get_demand_dict():
 def get_duration_dict():
     """Get the 2D dictionary of the travel times between stores """
     d = {}
-    with open("WoolworthsTravelDurations.csv") as f:
+    with open("data" + os.sep + "WoolworthsTravelDurations.csv") as f:
         c = reader(f)
         _, *stores = next(c)
 
@@ -43,7 +44,7 @@ def get_duration_dict():
 def get_location_dict():
     """Get the 2D dictionary of the travel times between stores """
     d = {}
-    with open("WoolworthsDistances.csv") as f:
+    with open("data" + os.sep + "WoolworthsDistances.csv") as f:
         c = reader(f)
         _, *stores = next(c)
 
@@ -54,7 +55,7 @@ def get_location_dict():
 def get_store_demand():
     """Get the 2D dictionary of the demans of a store """
     d = {}
-    with open("WoolworthsDistances.csv") as f:
+    with open("data" + os.sep + "WoolworthsDistances.csv") as f:
         c = reader(f)
         _, *stores = next(c)
 
@@ -91,7 +92,7 @@ def get_cost_of_route(route,day):
 def get_clean_congestion():
     """clean up congestion % factor data, removing outliers, and calculate mon-thu average"""
 
-    congestion_d = pd.read_csv("congestion_data.txt", sep = ',')
+    congestion_d = pd.read_csv("data" + os.sep + "congestion_data.txt", sep = ',')
     days = list(congestion_d)
 
     #remove outliers, i.e. if z score greater than 2.5
