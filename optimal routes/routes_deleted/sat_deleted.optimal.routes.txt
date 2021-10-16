@@ -1,0 +1,14 @@
+Distribution Centre Auckland,Countdown Auckland City,Countdown Victoria Street West,Countdown Ponsonby,Countdown Grey Lynn Central,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Birkenhead,Countdown Glenfield,Countdown Northcote,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Grey Lynn,Countdown Mairangi Bay,Countdown Sunnynook,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Hauraki Corner,Countdown Milford,Countdown Takapuna,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Aviemore Drive,Countdown Howick,Countdown Meadowlands,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Lynfield,Countdown Blockhouse Bay,Countdown Mt Roskill,Countdown St Lukes,Countdown Three Kings,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Lynmall,Countdown Kelston,Countdown Henderson,Countdown Lincoln Road,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Manukau Mall,Countdown Botany Downs,Countdown Pakuranga,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Mt Wellington,Countdown St Johns,Countdown Meadowbank,Countdown Onehunga,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Papatoetoe,Countdown Mangere East,Countdown Airport,Countdown Mangere Mall,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Greenlane,Countdown Newmarket,Countdown Mt Eden,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Takanini,Countdown Roselands,Countdown Manurewa,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Te Atatu South,Countdown Te Atatu,Countdown Pt Chevalier,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Westgate,Countdown Hobsonville,Distribution Centre Auckland

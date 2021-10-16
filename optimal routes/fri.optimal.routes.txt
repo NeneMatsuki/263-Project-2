@@ -1,0 +1,22 @@
+Distribution Centre Auckland,Countdown Auckland City,Countdown Metro Albert Street,Countdown Victoria Street West,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Birkenhead,Countdown Glenfield,Countdown Metro Halsey Street,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Botany Downs,Countdown Aviemore Drive,Countdown Highland Park,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Greenlane,Countdown Newmarket,Countdown Mt Eden,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Grey Lynn,Countdown Grey Lynn Central,Countdown St Lukes,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Lynfield,Countdown Mt Roskill,Countdown Three Kings,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Lynmall,Countdown Kelston,FreshChoice Glen Eden,Countdown Blockhouse Bay,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Mangere East,Countdown Airport,Countdown Mangere Mall,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Manukau Mall,Countdown Manukau,Countdown Papatoetoe,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Meadowlands,Countdown Howick,FreshChoice Half Moon Bay,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Northcote,Countdown Mairangi Bay,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Northwest,Countdown Browns Bay,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Roselands,Countdown Papakura,SuperValue Papakura,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown St Johns,Countdown Meadowbank,Countdown Onehunga,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Sylvia Park,Countdown Mt Wellington,Countdown Pakuranga,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Takapuna,Countdown Hauraki Corner,Distribution Centre Auckland
+Distribution Centre Auckland,Countdown Westgate,Countdown Hobsonville,Distribution Centre Auckland
+Distribution Centre Auckland,FreshChoice Mangere Bridge,SuperValue Avondale,Countdown Pt Chevalier,Countdown Ponsonby,Distribution Centre Auckland
+Distribution Centre Auckland,FreshChoice Otahuhu,Countdown Sunnynook,Countdown Milford,Distribution Centre Auckland
+Distribution Centre Auckland,FreshChoice Ranui,Countdown Te Atatu South,Countdown Te Atatu,Distribution Centre Auckland
+Distribution Centre Auckland,SuperValue Flatbush,Countdown Takanini,Countdown Manurewa,Distribution Centre Auckland
+Distribution Centre Auckland,SuperValue Titirangi,Countdown Henderson,SuperValue Palomino,Countdown Lincoln Road,Distribution Centre Auckland
