@@ -101,8 +101,11 @@ def get_total_cost(pool, day):
                     newRoute = newRoute[:-1]
                     # re-calculate details of newRoute
                     nPallets, travel_duration = get_newRoute_details(newRoute, demands, day)
-
-                totalCost += calculate_cost(nPallets, travel_duration) # add the cost of the newRoute to the total cost
+                
+                if((extraBus + len(routes))>MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY):
+                    totalCost += 2000
+                else:
+                    totalCost += calculate_cost(nPallets, travel_duration) # add the cost of the newRoute to the total cost
                 extraBus += 1                                          # add an Extra bus used
                 newRoute = tempRoute                                   # replaced newRoute with stores removed from the previous one
     
@@ -114,9 +117,9 @@ def get_total_cost(pool, day):
         totalCost += calculate_cost(nPallets, travel_duration)
         extraBus += 1
 
-    # if the number of trucks used exceeds the maximum trucks per day,  add $20000 to total cost for every truck rented
-    if((extraBus + len(routes))>MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY):
-        totalCost += ((extraBus + len(routes))-60) * 20000
+    # # if the number of trucks used exceeds the maximum trucks per day,  add $20000 to total cost for every truck rented
+    # if((extraBus + len(routes))>MAXIMUM_NUMBER_OF_TRUCKS_PER_DAY):
+    #     totalCost += ((extraBus + len(routes))-60) * 20000
 
     # return the total cost
     return(totalCost)
