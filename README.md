@@ -22,5 +22,6 @@ Run main.py to obtain files that contain optimal routes;
 To run simulations, run bootstrap_scenarios
 -   If plot_Simulation is set to true, the simulation of the original scenario is run
 -   If plot_with_stores_deleted is set to true, simulation with some stores removed is run
+-   If get_CI_for_scenarios is set to true, the confidence interval for costs of the 2 scenarios above is printed
 
 Authors: Shannon Blackhall, Maia Darling, Tom Purkis, Nene Matsuki

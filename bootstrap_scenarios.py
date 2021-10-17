@@ -7,13 +7,11 @@ import statistics
 import statsmodels.stats.weightstats as sms
 import os
 import numpy as np
+from scipy import stats
 
 # stores whcih routes exceeded demand
 global EXCEEDED 
 EXCEEDED = np.zeros(25)
-
-global DELETEDTOTAL
-DELETEDTOTAL = 0
 
 global ORIGINALTOTAL
 ORIGINALTOTAL = 132946
@@ -258,6 +256,7 @@ def plot_boot(pool, day):
     if(no_stores_removed):
         found = False
         i = 0
+        original  = np.full(1000,19113.75)
         if(day == "m_t"):
             while((i < 1000) and (found == False)):
                 if (costs[i] > 19113.75):
@@ -265,12 +264,14 @@ def plot_boot(pool, day):
                 i+=1
 
         elif(day == "fri"):
+            original = np.full(1000, 18750)
             while((i < 1000) and (found == False)):
                 if (costs[i] > 18750):
                     found = True
                 i += 1
 
         else:
+            original = np.full(1000, 11831.25)
             while((i < 1000) and (found == False)):
                 if (costs[i] > 11831.25):
                     found = True
@@ -278,26 +279,21 @@ def plot_boot(pool, day):
 
     global EXCEEDED
     global ORIGINALTOTAL
-    global DELETEDTOTAL
 
-    original = 132950
 
     if(no_stores_removed):
+        errorRate = sum(np.greater(costs, original))/len(costs)
         if(pool == "m_t"):
             ORIGINALTOTAL += 4*statistics.mean(costs)
         else:
             ORIGINALTOTAL += statistics.mean(costs)
-    else:
-        if(pool == "routes_deleted" + os.sep + "m_t_deleted"):
-            DELETEDTOTAL += 4*statistics.mean(costs)
-        else:
-            DELETEDTOTAL += statistics.mean(costs)
+
 
     print("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
     print('The mean cost for '+ pool +' is', statistics.mean(costs))
     print('The 95%" bootstrap confidence interval is', costs[25], ",", costs[975], '\n')
     if(no_stores_removed):
-        print('If we plan our project using expected times and the resulting optimal path, cost will be greater than expected, ', (1000-i)/10, '% of the time')
+        print('If we plan our project using expected times and the resulting optimal path, cost will be greater than expected, ', errorRate * 100, '% of the time')
         print('\nthese are the times each route exceeds the pallet limit:')
         print(EXCEEDED)
     print("/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
@@ -317,12 +313,41 @@ def plot_boot(pool, day):
 
     EXCEEDED = np.zeros(26)
 
+def scenario_t_test():
+    # construct totals for each scenario
+
+    print("\n----------------------------------------------------------Comparing scenarios----------------------------------------------------------\n")
+
+    costsO = [None] * 1000
+    for i in range (1000):
+        costsO[i] = 4 * get_total_cost("m_t", "m_t")
+        costsO[i] += get_total_cost("fri", "fri")
+        costsO[i] += get_total_cost("sat", "sat")
+
+    costsO.sort()    # sort the cost
+
+    costsD = [None] * 1000
+    for i in range (1000):
+        costsD[i] = 4* get_total_cost("routes_deleted" + os.sep + "m_t_deleted", "m_t")
+        costsD[i] += get_total_cost("routes_deleted" + os.sep + "fri_deleted", "fri")
+        costsD[i] += get_total_cost("routes_deleted" + os.sep + "sat_deleted", "sat")
+    costsD.sort()    # sort the cost
+
+    C_I = sms.CompareMeans(sms.DescrStatsW(costsO), sms.DescrStatsW(costsD))
+
+    # return the t test results
+    print("This is the t-test result where H0 = the costs for scenarios with and without deletion of stores is the same:")
+    print(stats.ttest_ind(costsO,costsD))
+    print('\nThe 95%" confidence interval for difference in means assuming equal deviation is', C_I.tconfint_diff())
+    print('\n---------------------------------------------------------------------------------------------------------------------------------------\n')
+
 
 
 if __name__ == "__main__":
 
-    plot_Simulation = True        # plot original distribution
+    plot_Simulation = False        # plot original distribution
     plot_with_stores_deleted = True # plot with some stores deleted
+    get_CI_for_scenarios = True # get the condifence interval of difference between deleting and not deleting stores
 
     if(plot_Simulation):
         ORIGINALTOTAL = 0
@@ -335,10 +360,11 @@ if __name__ == "__main__":
 
     #plot bootstraps
     if(plot_with_stores_deleted):
-        DELETEDTOTAL = 0
         print("\n\n------------Investigating scenario where Countdown Manukau, Papakura, northwest, Higland Park, and Sylvia Park is deleted------------\n")
         plot_boot("routes_deleted" + os.sep + "m_t_deleted", "m_t")
         plot_boot("routes_deleted" + os.sep + "fri_deleted", "fri")
         plot_boot("routes_deleted" + os.sep + "sat_deleted", "sat")
-        print("\nThis sceneario costs approximately $", round(ORIGINALTOTAL - DELETEDTOTAL,2), "less than the original scenario" )
         print('\n-------------------------------------------------------------------------------------------------------------------------------------\n')
+
+    if(get_CI_for_scenarios):
+        scenario_t_test()
